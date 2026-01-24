@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About — Computational Intelligence Lab</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #fafafa;
+            --bg-secondary: #f0f0f0;
+            --text-primary: #0a0a0a;
+            --text-secondary: #666666;
+            --border-color: #e0e0e0;
+            --hover-bg: #f0f0f0;
+            --gradient-overlay: rgba(0,0,0,0.03);
+            --accent-color: #0066ff;
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #1a1a1a;
+            --text-primary: #f5f5f5;
+            --text-secondary: #6b6b6b;
+            --border-color: #2a2a2a;
+            --hover-bg: #1a1a1a;
+            --gradient-overlay: rgba(255,255,255,0.02);
+            --accent-color: #4d94ff;
+        }
+
+        html {
+            font-size: 16px;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: 'Space Mono', monospace;
+            line-height: 1.5;
+            min-height: 100vh;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+            transition: opacity 0.3s ease;
+        }
+
+        a:hover {
+            opacity: 0.6;
+        }
+
+        /* Theme Toggle Button */
+        .theme-toggle {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 1000;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--text-primary);
+            color: var(--bg-primary);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+        }
+
+        .theme-toggle:active {
+            transform: scale(0.95);
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(to bottom, var(--bg-primary) 0%, var(--bg-primary) 50%, transparent 100%);
+            transition: background 0.3s ease;
+        }
+
+        .logo {
+            font-family: 'Syne', sans-serif;
+            font-weight: 800;
+            font-size: 1.25rem;
+            letter-spacing: -0.02em;
+            text-transform: lowercase;
+        }
+
+        nav {
+            display: flex;
+            gap: 2.5rem;
+        }
+
+        nav a {
+            font-size: 0.75rem;
+            text-transform: lowercase;
+            letter-spacing: 0.05em;
+        }
+
+        nav a.active {
+            opacity: 0.5;
+        }
+
+        /* Page Header */
+        .page-header {
+            padding: 10rem 2rem 4rem;
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .page-title {
+            font-family: 'Syne', sans-serif;
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.03em;
+        }
+
+        .page-subtitle {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+
+        /* Content Sections */
+        .content-section {
+            padding: 4rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .content-section.alternate {
+            background-color: var(--bg-secondary);
+            transition: background-color 0.3s ease;
+        }
+
+        .section-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        .section-heading {
+            font-family: 'Syne', sans-serif;
+            font-size: clamp(1.8rem, 3vw, 2.5rem);
+            font-weight: 600;
+            margin-bottom: 2rem;
+            letter-spacing: -0.02em;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: start;
+        }
+
+        .text-content p {
+            font-size: 0.95rem;
+            line-height: 1.8;
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+        }
+
+        .text-content h3 {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 2rem 0 1rem;
+            color: var(--text-primary);
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .stat-card {
+            padding: 2rem;
+            border: 1px solid var(--border-color);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            border-color: var(--accent-color);
+            transform: translateY(-4px);
+        }
+
+        .stat-number {
+            font-family: 'Syne', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--accent-color);
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        /* Values Grid */
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .value-card {
+            padding: 2rem;
+            border: 1px solid var(--border-color);
+            background-color: var(--bg-primary);
+            transition: all 0.3s ease;
+        }
+
+        .value-card:hover {
+            border-color: var(--accent-color);
+            transform: translateX(0.5rem);
+        }
+
+        .value-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .value-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .value-desc {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding-left: 3rem;
+            margin-top: 3rem;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background-color: var(--border-color);
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-bottom: 3rem;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -3.5rem;
+            top: 0.5rem;
+            width: 1rem;
+            height: 1rem;
+            border-radius: 50%;
+            background-color: var(--accent-color);
+            border: 3px solid var(--bg-primary);
+        }
+
+        .timeline-year {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--accent-color);
+        }
+
+        .timeline-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-desc {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Team Highlights */
+        .team-highlights {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .team-highlight {
+            text-align: center;
+            padding: 2rem;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .team-highlight:hover {
+            border-color: var(--accent-color);
+            transform: scale(1.05);
+        }
+
+        .team-highlight-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .team-highlight-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+
+        .team-highlight-desc {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 6rem 2rem;
+            text-align: center;
+            background-color: var(--bg-secondary);
+            transition: background-color 0.3s ease;
+        }
+
+        .cta-title {
+            font-family: 'Syne', sans-serif;
+            font-size: clamp(1.8rem, 4vw, 2.5rem);
+            font-weight: 600;
+            margin-bottom: 2rem;
+            letter-spacing: -0.02em;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .cta-button {
+            padding: 1rem 2rem;
+            border: 1px solid var(--text-primary);
+            font-family: 'Space Mono', monospace;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .cta-button.primary {
+            background-color: var(--text-primary);
+            color: var(--bg-primary);
+        }
+
+        .cta-button.primary:hover {
+            opacity: 0.8;
+        }
+
+        .cta-button.secondary:hover {
+            background-color: var(--hover-bg);
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem 2rem 2rem;
+            background-color: var(--bg-primary);
+            border-top: 1px solid var(--border-color);
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .footer-col h4 {
+            font-family: 'Syne', sans-serif;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .footer-col p,
+        .footer-col a {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-bottom {
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            header {
+                padding: 1rem 1.5rem;
+            }
+
+            nav {
+                gap: 1.5rem;
+            }
+
+            nav a {
+                font-size: 0.7rem;
+            }
+
+            .page-header {
+                padding: 8rem 1.5rem 3rem;
+            }
+
+            .content-section {
+                padding: 3rem 1.5rem;
+            }
+
+            .content-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .theme-toggle {
+                bottom: 1.5rem;
+                right: 1.5rem;
+                width: 45px;
+                height: 45px;
+            }
+
+            .timeline {
+                padding-left: 2rem;
+            }
+
+            .timeline-item::before {
+                left: -2.5rem;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .cta-button {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Theme Toggle Button -->
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+        <span id="themeIcon">☀️</span>
+    </button>
+
+    <header>
+        <a href="index.html" class="logo">lab</a>
+        <nav>
+            <a href="about.html" class="active">about</a>
+            <a href="research.html">research</a>
+            <a href="news.html">news</a>
+            <a href="team.html">team</a>
+            <a href="publications.html">publications</a>
+            <a href="contact.html">contact</a>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Page Header -->
+        <section class="page-header">
+            <h1 class="page-title">About Our Lab</h1>
+            <p class="page-subtitle">
+                Advancing the frontiers of artificial intelligence through innovative research, 
+                collaborative partnerships, and a commitment to solving real-world challenges.
+            </p>
+        </section>
+
+        <!-- Mission & Vision -->
+        <section class="content-section">
+            <div class="content-grid">
+                <div class="text-content">
+                    <h2 class="section-heading">Who We Are</h2>
+                    <p>
+                        The Computational Intelligence Lab is a leading research group dedicated to pushing 
+                        the boundaries of artificial intelligence and machine learning. Founded in 2015 at 
+                        Seoul National University, our lab has grown into a vibrant community of researchers, 
+                        engineers, and students working on cutting-edge AI technologies.
+                    </p>
+                    <p>
+                        Our research spans multiple domains including deep learning, computer vision, natural 
+                        language processing, reinforcement learning, and robotics. We believe in the power of 
+                        fundamental research to drive innovation while maintaining a strong focus on practical 
+                        applications that benefit society.
+                    </p>
+                    <p>
+                        With a diverse team of 15+ members from various backgrounds, we foster an environment 
+                        of creativity, collaboration, and continuous learning. Our work has been published in 
+                        top-tier conferences and journals, and we maintain active partnerships with leading 
+                        research institutions and companies worldwide.
+                    </p>
+                </div>
+                <div>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-number">50+</div>
+                            <div class="stat-label">Publications</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">15+</div>
+                            <div class="stat-label">Team Members</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">8</div>
+                            <div class="stat-label">Active Projects</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">25+</div>
+                            <div class="stat-label">Collaborations</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Values -->
+        <section class="content-section alternate">
+            <h2 class="section-heading">Our Core Values</h2>
+            <div class="values-grid">
+                <div class="value-card">
+                    <div class="value-icon">🎯</div>
+                    <h3 class="value-title">Excellence</h3>
+                    <p class="value-desc">
+                        We strive for the highest standards in research quality, pushing ourselves to 
+                        produce work that advances the field and stands the test of time.
+                    </p>
+                </div>
+                <div class="value-card">
+                    <div class="value-icon">🤝</div>
+                    <h3 class="value-title">Collaboration</h3>
+                    <p class="value-desc">
+                        We believe the best research emerges from diverse perspectives working together, 
+                        fostering an environment of open communication and mutual support.
+                    </p>
+                </div>
+                <div class="value-card">
+                    <div class="value-icon">💡</div>
+                    <h3 class="value-title">Innovation</h3>
+                    <p class="value-desc">
+                        We encourage creative thinking and risk-taking, exploring novel approaches to 
+                        solve complex problems that others haven't considered.
+                    </p>
+                </div>
+                <div class="value-card">
+                    <div class="value-icon">⚖️</div>
+                    <h3 class="value-title">Ethics</h3>
+                    <p class="value-desc">
+                        We are committed to responsible AI development, considering the societal impact 
+                        of our work and ensuring our research benefits humanity.
+                    </p>
+                </div>
+                <div class="value-card">
+                    <div class="value-icon">🌍</div>
+                    <h3 class="value-title">Impact</h3>
+                    <p class="value-desc">
+                        We focus on research that addresses real-world challenges, bridging the gap 
+                        between theoretical advances and practical applications.
+                    </p>
+                </div>
+                <div class="value-card">
+                    <div class="value-icon">📚</div>
+                    <h3 class="value-title">Learning</h3>
+                    <p class="value-desc">
+                        We cultivate a culture of continuous growth, encouraging all members to expand 
+                        their knowledge and develop new skills throughout their careers.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- History -->
+        <section class="content-section">
+            <h2 class="section-heading">Our Journey</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-year">2024</div>
+                    <div class="timeline-title">Expanded Partnerships</div>
+                    <div class="timeline-desc">
+                        Launched new collaborations with Google Research and Meta AI. Received funding 
+                        for three major research initiatives in computer vision and NLP.
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-year">2023</div>
+                    <div class="timeline-title">Best Paper Award</div>
+                    <div class="timeline-desc">
+                        Our meta-learning research received the Best Paper Award at ICML. Lab grew to 
+                        15+ members with new faculty and PhD students joining the team.
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-year">2020</div>
+                    <div class="timeline-title">Major Milestone</div>
+                    <div class="timeline-desc">
+                        Published breakthrough work on self-supervised learning in CVPR. Established 
+                        industry partnership program with leading tech companies.
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-year">2018</div>
+                    <div class="timeline-title">Research Expansion</div>
+                    <div class="timeline-desc">
+                        Expanded research focus to include robotics and reinforcement learning. 
+                        Secured major grant for AI safety and interpretability research.
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-year">2015</div>
+                    <div class="timeline-title">Lab Founded</div>
+                    <div class="timeline-desc">
+                        Computational Intelligence Lab established at Seoul National University 
+                        with a focus on deep learning and computer vision research.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Team Culture -->
+        <section class="content-section alternate">
+            <h2 class="section-heading">What Makes Us Different</h2>
+            <div class="team-highlights">
+                <div class="team-highlight">
+                    <div class="team-highlight-icon">🎓</div>
+                    <h3 class="team-highlight-title">Mentorship</h3>
+                    <p class="team-highlight-desc">
+                        Every student receives personalized guidance from experienced researchers, 
+                        ensuring growth and success.
+                    </p>
+                </div>
+                <div class="team-highlight">
+                    <div class="team-highlight-icon">🌐</div>
+                    <h3 class="team-highlight-title">Global Network</h3>
+                    <p class="team-highlight-desc">
+                        Active collaborations with top institutions worldwide provide unique 
+                        opportunities for international research.
+                    </p>
+                </div>
+                <div class="team-highlight">
+                    <div class="team-highlight-icon">🔬</div>
+                    <h3 class="team-highlight-title">Cutting-Edge Resources</h3>
+                    <p class="team-highlight-desc">
+                        Access to state-of-the-art computing infrastructure and research tools 
+                        supports ambitious projects.
+                    </p>
+                </div>
+                <div class="team-highlight">
+                    <div class="team-highlight-icon">🎪</div>
+                    <h3 class="team-highlight-title">Work-Life Balance</h3>
+                    <p class="team-highlight-desc">
+                        We value sustainable research practices and encourage healthy work-life 
+                        integration for all members.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA -->
+        <section class="cta-section">
+            <h2 class="cta-title">Join Our Mission</h2>
+            <div class="cta-buttons">
+                <a href="team.html" class="cta-button primary">Open Positions</a>
+                <a href="research.html" class="cta-button secondary">Explore Research</a>
+                <a href="contact.html" class="cta-button secondary">Get in Touch</a>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-col">
+                <h4>Location</h4>
+                <p>Engineering Building 301</p>
+                <p>Seoul National University</p>
+                <p>08826, Seoul (KR)</p>
+            </div>
+            
+            <div class="footer-col">
+                <h4>Contact</h4>
+                <p><a href="mailto:lab@example.com">lab@example.com</a></p>
+                <p>+82 02 880 0000</p>
+            </div>
+            
+            <div class="footer-col">
+                <h4>Social</h4>
+                <a href="#">Github</a>
+                <a href="#">Google Scholar</a>
+                <a href="#">Twitter</a>
+                <a href="#">LinkedIn</a>
+            </div>
+
+            <div class="footer-col">
+                <h4>Resources</h4>
+                <a href="publications.html">Publications</a>
+                <a href="#">Code</a>
+                <a href="#">Datasets</a>
+                <a href="#">Blog</a>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <span>© 2024 Computational Intelligence Lab. All rights reserved.</span>
+        </div>
+    </footer>
+
+    <script>
+        // Theme toggle functionality
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+        const htmlElement = document.documentElement;
+
+        // Check for saved theme preference or default to 'light'
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        htmlElement.setAttribute('data-theme', currentTheme);
+        updateThemeIcon(currentTheme);
+
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = htmlElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            
+            htmlElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateThemeIcon(newTheme);
+        });
+
+        function updateThemeIcon(theme) {
+            themeIcon.textContent = theme === 'light' ? '🌙' : '☀️';
+        }
+    </script>
+</body>
+</html>
