@@ -1,0 +1,1151 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team — Computational Intelligence Lab</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #fafafa;
+            --bg-secondary: #f0f0f0;
+            --text-primary: #0a0a0a;
+            --text-secondary: #666666;
+            --border-color: #e0e0e0;
+            --hover-bg: #f0f0f0;
+            --gradient-overlay: rgba(0,0,0,0.03);
+            --accent-color: #0066ff;
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #1a1a1a;
+            --text-primary: #f5f5f5;
+            --text-secondary: #6b6b6b;
+            --border-color: #2a2a2a;
+            --hover-bg: #1a1a1a;
+            --gradient-overlay: rgba(255,255,255,0.02);
+            --accent-color: #4d94ff;
+        }
+
+        html {
+            font-size: 16px;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: 'Space Mono', monospace;
+            line-height: 1.5;
+            min-height: 100vh;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+            transition: opacity 0.3s ease;
+        }
+
+        a:hover {
+            opacity: 0.6;
+        }
+
+        /* Theme Toggle Button */
+        .theme-toggle {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 1000;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--text-primary);
+            color: var(--bg-primary);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+        }
+
+        .theme-toggle:active {
+            transform: scale(0.95);
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(to bottom, var(--bg-primary) 0%, var(--bg-primary) 50%, transparent 100%);
+            transition: background 0.3s ease;
+        }
+
+        .logo {
+            font-family: 'Syne', sans-serif;
+            font-weight: 800;
+            font-size: 1.25rem;
+            letter-spacing: -0.02em;
+            text-transform: lowercase;
+        }
+
+        nav {
+            display: flex;
+            gap: 2.5rem;
+        }
+
+        nav a {
+            font-size: 0.75rem;
+            text-transform: lowercase;
+            letter-spacing: 0.05em;
+        }
+
+        nav a.active {
+            opacity: 0.5;
+        }
+
+        /* Page Header */
+        .page-header {
+            padding: 10rem 2rem 4rem;
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .page-title {
+            font-family: 'Syne', sans-serif;
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.03em;
+        }
+
+        .page-subtitle {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+
+        /* Content Sections */
+        .content-section {
+            padding: 4rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .content-section.alternate {
+            background-color: var(--bg-secondary);
+            transition: background-color 0.3s ease;
+        }
+
+        .section-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        .section-heading {
+            font-family: 'Syne', sans-serif;
+            font-size: clamp(1.8rem, 3vw, 2.5rem);
+            font-weight: 600;
+            margin-bottom: 3rem;
+            letter-spacing: -0.02em;
+        }
+
+        /* Principal Investigator */
+        .pi-section {
+            max-width: 1000px;
+            margin: 0 auto 4rem;
+        }
+
+        .pi-card {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 3rem;
+            padding: 3rem;
+            border: 1px solid var(--border-color);
+            background-color: var(--bg-primary);
+        }
+
+        .pi-image {
+            width: 100%;
+            aspect-ratio: 1;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--border-color) 0%, var(--hover-bg) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 6rem;
+        }
+
+        .pi-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .pi-name {
+            font-family: 'Syne', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .pi-title {
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--accent-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .pi-bio {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+
+        .pi-research {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .pi-research-title {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-secondary);
+            margin-bottom: 0.75rem;
+        }
+
+        .pi-research-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .research-tag {
+            font-size: 0.7rem;
+            padding: 0.35rem 0.75rem;
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+        }
+
+        .pi-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .pi-link {
+            font-size: 0.85rem;
+            padding: 0.75rem 1.5rem;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .pi-link:hover {
+            border-color: var(--accent-color);
+            opacity: 1;
+        }
+
+        /* Team Grid */
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .team-member {
+            border: 1px solid var(--border-color);
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            background-color: var(--bg-primary);
+        }
+
+        .team-member:hover {
+            border-color: var(--accent-color);
+            transform: translateY(-8px);
+        }
+
+        .member-image {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--border-color) 0%, var(--hover-bg) 100%);
+            margin: 0 auto 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+        }
+
+        .member-name {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .member-role {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+        }
+
+        .member-bio {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .member-research {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .member-research-title {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .member-research-area {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .member-links {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1.5rem;
+        }
+
+        .member-link {
+            font-size: 0.7rem;
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .member-link:hover {
+            border-color: var(--accent-color);
+            opacity: 1;
+        }
+
+        /* Alumni Section */
+        .alumni-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .alumni-item {
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .alumni-item:hover {
+            border-color: var(--accent-color);
+            transform: translateX(0.5rem);
+        }
+
+        .alumni-name {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .alumni-year {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-secondary);
+            margin-bottom: 0.75rem;
+        }
+
+        .alumni-current {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        /* Join Section */
+        .join-section {
+            padding: 6rem 2rem;
+            background-color: var(--bg-secondary);
+            transition: background-color 0.3s ease;
+        }
+
+        .join-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .join-title {
+            font-family: 'Syne', sans-serif;
+            font-size: clamp(1.8rem, 4vw, 2.5rem);
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .join-subtitle {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 3rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .positions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .position-card {
+            padding: 2rem;
+            border: 1px solid var(--border-color);
+            background-color: var(--bg-primary);
+            text-align: left;
+            transition: all 0.3s ease;
+        }
+
+        .position-card:hover {
+            border-color: var(--accent-color);
+            transform: translateY(-4px);
+        }
+
+        .position-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .position-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .position-desc {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .position-requirements {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .position-requirements-title {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-secondary);
+            margin-bottom: 0.75rem;
+        }
+
+        .position-requirements-list {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            list-style: none;
+            padding: 0;
+        }
+
+        .position-requirements-list li {
+            padding-left: 1rem;
+            position: relative;
+            margin-bottom: 0.5rem;
+        }
+
+        .position-requirements-list li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+        }
+
+        .apply-button {
+            display: inline-block;
+            padding: 1rem 2rem;
+            border: 1px solid var(--text-primary);
+            background-color: var(--text-primary);
+            color: var(--bg-primary);
+            font-family: 'Space Mono', monospace;
+            font-size: 0.85rem;
+            margin-top: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .apply-button:hover {
+            opacity: 0.8;
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem 2rem 2rem;
+            background-color: var(--bg-primary);
+            border-top: 1px solid var(--border-color);
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .footer-col h4 {
+            font-family: 'Syne', sans-serif;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .footer-col p,
+        .footer-col a {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-bottom {
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            header {
+                padding: 1rem 1.5rem;
+            }
+
+            nav {
+                gap: 1.5rem;
+            }
+
+            nav a {
+                font-size: 0.7rem;
+            }
+
+            .page-header {
+                padding: 8rem 1.5rem 3rem;
+            }
+
+            .content-section {
+                padding: 3rem 1.5rem;
+            }
+
+            .pi-card {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+                padding: 2rem;
+            }
+
+            .pi-image {
+                width: 200px;
+                height: 200px;
+                margin: 0 auto;
+            }
+
+            .team-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .theme-toggle {
+                bottom: 1.5rem;
+                right: 1.5rem;
+                width: 45px;
+                height: 45px;
+            }
+
+            .positions-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Theme Toggle Button -->
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+        <span id="themeIcon">☀️</span>
+    </button>
+
+    <header>
+        <a href="index.html" class="logo">lab</a>
+        <nav>
+            <a href="about.html">about</a>
+            <a href="research.html">research</a>
+            <a href="news.html">news</a>
+            <a href="team.html" class="active">team</a>
+            <a href="publications.html">publications</a>
+            <a href="contact.html">contact</a>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Page Header -->
+        <section class="page-header">
+            <h1 class="page-title">Our Team</h1>
+            <p class="page-subtitle">
+                Meet the talented researchers, students, and collaborators who drive innovation 
+                and excellence in artificial intelligence at our lab.
+            </p>
+        </section>
+
+        <!-- Principal Investigator -->
+        <section class="content-section">
+            <h2 class="section-heading">Principal Investigator</h2>
+            
+            <div class="pi-section">
+                <div class="pi-card">
+                    <div class="pi-image">👨‍🏫</div>
+                    <div class="pi-content">
+                        <h3 class="pi-name">Prof. Kim Minjun</h3>
+                        <p class="pi-title">Lab Director & Professor</p>
+                        <p class="pi-bio">
+                            Prof. Kim Minjun is a leading researcher in deep learning and computational intelligence 
+                            with over 15 years of experience in academia and industry. He received his Ph.D. from 
+                            MIT in 2008 and joined Seoul National University in 2015, where he founded the 
+                            Computational Intelligence Lab.
+                        </p>
+                        <p class="pi-bio">
+                            His research has been published in top-tier venues including NeurIPS, ICML, CVPR, and 
+                            Nature Machine Intelligence. He has received numerous awards including the NSF CAREER 
+                            Award, Google Faculty Research Award, and Best Paper Awards at major conferences.
+                        </p>
+                        <div class="pi-research">
+                            <div class="pi-research-title">Research Interests</div>
+                            <div class="pi-research-tags">
+                                <span class="research-tag">Deep Learning</span>
+                                <span class="research-tag">Computer Vision</span>
+                                <span class="research-tag">Meta-Learning</span>
+                                <span class="research-tag">AI Safety</span>
+                            </div>
+                        </div>
+                        <div class="pi-links">
+                            <a href="#" class="pi-link">Google Scholar</a>
+                            <a href="#" class="pi-link">Personal Website</a>
+                            <a href="#" class="pi-link">Email</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Research Scientists -->
+        <section class="content-section alternate">
+            <h2 class="section-heading">Research Scientists</h2>
+            <p class="section-title">Senior researchers leading cutting-edge projects</p>
+            
+            <div class="team-grid">
+                <div class="team-member">
+                    <div class="member-image">👩‍🔬</div>
+                    <h3 class="member-name">Dr. Park Soyeon</h3>
+                    <p class="member-role">Research Scientist</p>
+                    <p class="member-bio">
+                        Dr. Park specializes in computer vision and multi-modal learning. She completed her 
+                        Ph.D. at Stanford in 2019 and has published over 20 papers in top-tier conferences.
+                    </p>
+                    <div class="member-research">
+                        <div class="member-research-title">Focus Area</div>
+                        <div class="member-research-area">Computer Vision, Multi-Modal AI</div>
+                    </div>
+                    <div class="member-links">
+                        <a href="#" class="member-link">Scholar</a>
+                        <a href="#" class="member-link">GitHub</a>
+                        <a href="#" class="member-link">Email</a>
+                    </div>
+                </div>
+
+                <div class="team-member">
+                    <div class="member-image">👨‍🔬</div>
+                    <h3 class="member-name">Dr. Choi Jinhyuk</h3>
+                    <p class="member-role">Research Scientist</p>
+                    <p class="member-bio">
+                        Dr. Choi's research focuses on reinforcement learning and robotics. He received his 
+                        Ph.D. from UC Berkeley in 2020 and specializes in sim-to-real transfer.
+                    </p>
+                    <div class="member-research">
+                        <div class="member-research-title">Focus Area</div>
+                        <div class="member-research-area">Reinforcement Learning, Robotics</div>
+                    </div>
+                    <div class="member-links">
+                        <a href="#" class="member-link">Scholar</a>
+                        <a href="#" class="member-link">GitHub</a>
+                        <a href="#" class="member-link">Email</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PhD Students -->
+        <section class="content-section">
+            <h2 class="section-heading">PhD Students</h2>
+            <p class="section-title">Doctoral researchers advancing the frontiers of AI</p>
+            
+            <div class="team-grid">
+                <div class="team-member">
+                    <div class="member-image">👨‍💻</div>
+                    <h3 class="member-name">Lee Jihoon</h3>
+                    <p class="member-role">PhD Candidate (4th year)</p>
+                    <p class="member-bio">
+                        Researching adaptive reinforcement learning algorithms for autonomous systems. 
+                        Published 8 papers at major conferences including ICML and NeurIPS.
+                    </p>
+                    <div class="member-research">
+                        <div class="member-research-title">Research Focus</div>
+                        <div class="member-research-area">Meta-Reinforcement Learning</div>
+                    </div>
+                    <div class="member-links">
+                        <a href="#" class="member-link">Scholar</a>
+                        <a href="#" class="member-link">GitHub</a>
+                    </div>
+                </div>
+
+                <div class="team-member">
+                    <div class="member-image">👩‍💻</div>
+                    <h3 class="member-name">Choi Yuna</h3>
+                    <p class="member-role">PhD Candidate (3rd year)</p>
+                    <p class="member-bio">
+                        Working on natural language processing and knowledge graphs. Focuses on efficient 
+                        methods for knowledge extraction from large-scale text corpora.
+                    </p>
+                    <div class="member-research">
+                        <div class="member-research-title">Research Focus</div>
+                        <div class="member-research-area">NLP, Knowledge Graphs</div>
+                    </div>
+                    <div class="member-links">
+                        <a href="#" class="member-link">Scholar</a>
+                        <a href="#" class="member-link">GitHub</a>
+                    </div>
+                </div>
+
+                <div class="team-member">
+                    <div class="member-image">👨‍💼</div>
+                    <h3 class="member-name">Kang Donghyun</h3>
+                    <p class="member-role">PhD Student (2nd year)</p>
+                    <p class="member-bio">
+                        Exploring interpretability in deep neural networks. Developing methods to understand 
+                        how neural networks make decisions and process information.
+                    </p>
+                    <div class="member-research">
+                        <div class="member-research-title">Research Focus</div>
+                        <div class="member-research-area">Interpretability, Explainable AI</div>
+                    </div>
+                    <div class="member-links">
+                        <a href="#" class="member-link">Scholar</a>
+                        <a href="#" class="member-link">GitHub</a>
+                    </div>
+                </div>
+
+                <div class="team-member">
+                    <div class="member-image">👩‍🎨</div>
+                    <h3 class="member-name">Shin Haeun</h3>
+                    <p class="member-role">PhD Student (2nd year)</p>
+                    <p class="member-bio">
+                        Researching generative models and their applications in creative domains. 
+                        Particularly interested in controllable generation and style transfer.
+                    </p>
+                    <div class="member-research">
+                        <div class="member-research-title">Research Focus</div>
+                        <div class="member-research-area">Generative Models, Creative AI</div>
+                    </div>
+                    <div class="member-links">
+                        <a href="#" class="member-link">Scholar</a>
+                        <a href="#" class="member-link">GitHub</a>
+                    </div>
+                </div>
+
+                <div class="team-member">
+                    <div class="member-image">👨‍🚀</div>
+                    <h3 class="member-name">Yoon Sanghyuk</h3>
+                    <p class="member-role">PhD Student (1st year)</p>
+                    <p class="member-bio">
+                        Working on 3D scene understanding and reconstruction. Interested in developing 
+                        efficient methods for real-time 3D perception in robotic systems.
+                    </p>
+                    <div class="member-research">
+                        <div class="member-research-title">Research Focus</div>
+                        <div class="member-research-area">3D Vision, Scene Understanding</div>
+                    </div>
+                    <div class="member-links">
+                        <a href="#" class="member-link">Scholar</a>
+                        <a href="#" class="member-link">GitHub</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Master's Students -->
+        <section class="content-section alternate">
+            <h2 class="section-heading">Master's Students</h2>
+            <p class="section-title">Graduate students exploring advanced AI topics</p>
+            
+            <div class="team-grid">
+                <div class="team-member">
+                    <div class="member-image">👨‍🎓</div>
+                    <h3 class="member-name">Jung Seunghyun</h3>
+                    <p class="member-role">MS Student (2nd year)</p>
+                    <p class="member-bio">
+                        Working on efficient neural network architectures and model compression techniques. 
+                        Interested in deploying AI on edge devices.
+                    </p>
+                    <div class="member-research">
+                        <div class="member-research-title">Research Focus</div>
+                        <div class="member-research-area">Model Compression, Edge AI</div>
+                    </div>
+                    <div class="member-links">
+                        <a href="#" class="member-link">GitHub</a>
+                        <a href="#" class="member-link">Email</a>
+                    </div>
+                </div>
+
+                <div class="team-member">
+                    <div class="member-image">👩‍🎓</div>
+                    <h3 class="member-name">Han Minji</h3>
+                    <p class="member-role">MS Student (2nd year)</p>
+                    <p class="member-bio">
+                        Exploring applications of generative models in art and design. Developing tools 
+                        for creative practitioners to leverage AI in their workflows.
+                    </p>
+                    <div class="member-research">
+                        <div class="member-research-title">Research Focus</div>
+                        <div class="member-research-area">Generative AI, Human-AI Collaboration</div>
+                    </div>
+                    <div class="member-links">
+                        <a href="#" class="member-link">GitHub</a>
+                        <a href="#" class="member-link">Email</a>
+                    </div>
+                </div>
+
+                <div class="team-member">
+                    <div class="member-image">👨‍💼</div>
+                    <h3 class="member-name">Oh Taeyoung</h3>
+                    <p class="member-role">MS Student (1st year)</p>
+                    <p class="member-bio">
+                        Researching self-supervised learning methods for visual representation. 
+                        Investigating ways to learn from unlabeled data more effectively.
+                    </p>
+                    <div class="member-research">
+                        <div class="member-research-title">Research Focus</div>
+                        <div class="member-research-area">Self-Supervised Learning</div>
+                    </div>
+                    <div class="member-links">
+                        <a href="#" class="member-link">GitHub</a>
+                        <a href="#" class="member-link">Email</a>
+                    </div>
+                </div>
+
+                <div class="team-member">
+                    <div class="member-image">👩‍🔧</div>
+                    <h3 class="member-name">Kwon Jiwon</h3>
+                    <p class="member-role">MS Student (1st year)</p>
+                    <p class="member-bio">
+                        Working on multi-task learning and transfer learning. Exploring methods to leverage 
+                        knowledge across different tasks and domains.
+                    </p>
+                    <div class="member-research">
+                        <div class="member-research-title">Research Focus</div>
+                        <div class="member-research-area">Multi-Task Learning, Transfer Learning</div>
+                    </div>
+                    <div class="member-links">
+                        <a href="#" class="member-link">GitHub</a>
+                        <a href="#" class="member-link">Email</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Alumni -->
+        <section class="content-section">
+            <h2 class="section-heading">Alumni</h2>
+            <p class="section-title">Former members continuing to make impact in AI</p>
+            
+            <div class="alumni-grid">
+                <div class="alumni-item">
+                    <h4 class="alumni-name">Dr. Kim Hyejin</h4>
+                    <p class="alumni-year">PhD 2023</p>
+                    <p class="alumni-current">Research Scientist at Google DeepMind</p>
+                </div>
+
+                <div class="alumni-item">
+                    <h4 class="alumni-name">Dr. Lee Sangwoo</h4>
+                    <p class="alumni-year">PhD 2023</p>
+                    <p class="alumni-current">Assistant Professor at KAIST</p>
+                </div>
+
+                <div class="alumni-item">
+                    <h4 class="alumni-name">Dr. Park Eunji</h4>
+                    <p class="alumni-year">PhD 2022</p>
+                    <p class="alumni-current">Research Scientist at Meta AI</p>
+                </div>
+
+                <div class="alumni-item">
+                    <h4 class="alumni-name">Dr. Choi Minseok</h4>
+                    <p class="alumni-year">PhD 2022</p>
+                    <p class="alumni-current">ML Engineer at OpenAI</p>
+                </div>
+
+                <div class="alumni-item">
+                    <h4 class="alumni-name">Dr. Jung Yejin</h4>
+                    <p class="alumni-year">PhD 2021</p>
+                    <p class="alumni-current">Research Scientist at Microsoft Research</p>
+                </div>
+
+                <div class="alumni-item">
+                    <h4 class="alumni-name">Dr. Kang Seungho</h4>
+                    <p class="alumni-year">PhD 2021</p>
+                    <p class="alumni-current">Assistant Professor at Seoul National University</p>
+                </div>
+
+                <div class="alumni-item">
+                    <h4 class="alumni-name">Lim Jaehyun</h4>
+                    <p class="alumni-year">MS 2023</p>
+                    <p class="alumni-current">ML Engineer at Naver AI Lab</p>
+                </div>
+
+                <div class="alumni-item">
+                    <h4 class="alumni-name">Seo Yuna</h4>
+                    <p class="alumni-year">MS 2023</p>
+                    <p class="alumni-current">PhD Student at Stanford University</p>
+                </div>
+
+                <div class="alumni-item">
+                    <h4 class="alumni-name">Bae Jiwon</h4>
+                    <p class="alumni-year">MS 2022</p>
+                    <p class="alumni-current">Research Engineer at Kakao Brain</p>
+                </div>
+
+                <div class="alumni-item">
+                    <h4 class="alumni-name">Moon Sunho</h4>
+                    <p class="alumni-year">MS 2022</p>
+                    <p class="alumni-current">Data Scientist at Samsung Research</p>
+                </div>
+
+                <div class="alumni-item">
+                    <h4 class="alumni-name">Ahn Soojin</h4>
+                    <p class="alumni-year">MS 2021</p>
+                    <p class="alumni-current">PhD Student at MIT</p>
+                </div>
+
+                <div class="alumni-item">
+                    <h4 class="alumni-name">Go Minho</h4>
+                    <p class="alumni-year">MS 2021</p>
+                    <p class="alumni-current">ML Engineer at Tesla</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Join Our Team -->
+        <section class="join-section">
+            <div class="join-container">
+                <h2 class="join-title">Join Our Team</h2>
+                <p class="join-subtitle">
+                    We're always looking for talented and motivated individuals to join our lab. 
+                    If you're passionate about AI research and want to work on cutting-edge problems, 
+                    we'd love to hear from you.
+                </p>
+
+                <div class="positions-grid">
+                    <div class="position-card">
+                        <div class="position-icon">🎓</div>
+                        <h3 class="position-title">PhD Positions</h3>
+                        <p class="position-desc">
+                            Full-time PhD positions available for Fall 2024 admission. We seek candidates 
+                            with strong backgrounds in computer science, mathematics, or related fields.
+                        </p>
+                        <div class="position-requirements">
+                            <div class="position-requirements-title">Requirements</div>
+                            <ul class="position-requirements-list">
+                                <li>Strong programming skills (Python, PyTorch/TensorFlow)</li>
+                                <li>Research experience in ML/AI</li>
+                                <li>Publications at top venues (preferred)</li>
+                                <li>Excellent communication skills</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="position-card">
+                        <div class="position-icon">📚</div>
+                        <h3 class="position-title">Master's Positions</h3>
+                        <p class="position-desc">
+                            We accept master's students interested in pursuing research-focused programs. 
+                            Ideal for those planning to continue to PhD or industry research roles.
+                        </p>
+                        <div class="position-requirements">
+                            <div class="position-requirements-title">Requirements</div>
+                            <ul class="position-requirements-list">
+                                <li>Background in CS, EE, or related field</li>
+                                <li>Programming experience</li>
+                                <li>Strong academic record</li>
+                                <li>Research interests aligned with lab</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="position-card">
+                        <div class="position-icon">🔬</div>
+                        <h3 class="position-title">Postdoc Positions</h3>
+                        <p class="position-desc">
+                            Postdoctoral positions for researchers who want to develop independent research 
+                            programs in deep learning, computer vision, or related areas.
+                        </p>
+                        <div class="position-requirements">
+                            <div class="position-requirements-title">Requirements</div>
+                            <ul class="position-requirements-list">
+                                <li>PhD in CS, ML, or related field</li>
+                                <li>Strong publication record</li>
+                                <li>Independent research ability</li>
+                                <li>Collaborative mindset</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="position-card">
+                        <div class="position-icon">💼</div>
+                        <h3 class="position-title">Visiting Researchers</h3>
+                        <p class="position-desc">
+                            We welcome visiting researchers and students for short-term collaborations. 
+                            Ideal for academic visitors on sabbatical or industry researchers.
+                        </p>
+                        <div class="position-requirements">
+                            <div class="position-requirements-title">Requirements</div>
+                            <ul class="position-requirements-list">
+                                <li>Active research in relevant area</li>
+                                <li>Minimum 3-month commitment</li>
+                                <li>Self-funded or external funding</li>
+                                <li>Clear research proposal</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <a href="contact.html" class="apply-button">Apply Now</a>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-col">
+                <h4>Location</h4>
+                <p>Engineering Building 301</p>
+                <p>Seoul National University</p>
+                <p>08826, Seoul (KR)</p>
+            </div>
+            
+            <div class="footer-col">
+                <h4>Contact</h4>
+                <p><a href="mailto:lab@example.com">lab@example.com</a></p>
+                <p>+82 02 880 0000</p>
+            </div>
+            
+            <div class="footer-col">
+                <h4>Social</h4>
+                <a href="#">Github</a>
+                <a href="#">Google Scholar</a>
+                <a href="#">Twitter</a>
+                <a href="#">LinkedIn</a>
+            </div>
+
+            <div class="footer-col">
+                <h4>Resources</h4>
+                <a href="publications.html">Publications</a>
+                <a href="#">Code</a>
+                <a href="#">Datasets</a>
+                <a href="#">Blog</a>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <span>© 2024 Computational Intelligence Lab. All rights reserved.</span>
+        </div>
+    </footer>
+
+    <script>
+        // Theme toggle functionality
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+        const htmlElement = document.documentElement;
+
+        // Check for saved theme preference or default to 'light'
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        htmlElement.setAttribute('data-theme', currentTheme);
+        updateThemeIcon(currentTheme);
+
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = htmlElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            
+            htmlElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateThemeIcon(newTheme);
+        });
+
+        function updateThemeIcon(theme) {
+            themeIcon.textContent = theme === 'light' ? '🌙' : '☀️';
+        }
+    </script>
+</body>
+</html>
