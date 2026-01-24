@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact — Computational Intelligence Lab</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #fafafa;
+            --bg-secondary: #f0f0f0;
+            --text-primary: #0a0a0a;
+            --text-secondary: #666666;
+            --border-color: #e0e0e0;
+            --hover-bg: #f0f0f0;
+            --gradient-overlay: rgba(0,0,0,0.03);
+            --accent-color: #0066ff;
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #1a1a1a;
+            --text-primary: #f5f5f5;
+            --text-secondary: #6b6b6b;
+            --border-color: #2a2a2a;
+            --hover-bg: #1a1a1a;
+            --gradient-overlay: rgba(255,255,255,0.02);
+            --accent-color: #4d94ff;
+        }
+
+        html {
+            font-size: 16px;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: 'Space Mono', monospace;
+            line-height: 1.5;
+            min-height: 100vh;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+            transition: opacity 0.3s ease;
+        }
+
+        a:hover {
+            opacity: 0.6;
+        }
+
+        /* Theme Toggle Button */
+        .theme-toggle {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 1000;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--text-primary);
+            color: var(--bg-primary);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+        }
+
+        .theme-toggle:active {
+            transform: scale(0.95);
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(to bottom, var(--bg-primary) 0%, var(--bg-primary) 50%, transparent 100%);
+            transition: background 0.3s ease;
+        }
+
+        .logo {
+            font-family: 'Syne', sans-serif;
+            font-weight: 800;
+            font-size: 1.25rem;
+            letter-spacing: -0.02em;
+            text-transform: lowercase;
+        }
+
+        nav {
+            display: flex;
+            gap: 2.5rem;
+        }
+
+        nav a {
+            font-size: 0.75rem;
+            text-transform: lowercase;
+            letter-spacing: 0.05em;
+        }
+
+        nav a.active {
+            opacity: 0.5;
+        }
+
+        /* Page Header */
+        .page-header {
+            padding: 10rem 2rem 4rem;
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .page-title {
+            font-family: 'Syne', sans-serif;
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.03em;
+        }
+
+        .page-subtitle {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+
+        /* Content Sections */
+        .content-section {
+            padding: 4rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .content-section.alternate {
+            background-color: var(--bg-secondary);
+            transition: background-color 0.3s ease;
+        }
+
+        .section-heading {
+            font-family: 'Syne', sans-serif;
+            font-size: clamp(1.8rem, 3vw, 2.5rem);
+            font-weight: 600;
+            margin-bottom: 2rem;
+            letter-spacing: -0.02em;
+        }
+
+        .section-title {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        /* Contact Grid */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            margin-top: 3rem;
+        }
+
+        /* Contact Form */
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-secondary);
+        }
+
+        .form-input,
+        .form-textarea,
+        .form-select {
+            padding: 1rem 1.25rem;
+            border: 1px solid var(--border-color);
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: 'Space Mono', monospace;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus,
+        .form-textarea:focus,
+        .form-select:focus {
+            outline: none;
+            border-color: var(--accent-color);
+        }
+
+        .form-textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .form-button {
+            padding: 1rem 2rem;
+            border: 1px solid var(--text-primary);
+            background-color: var(--text-primary);
+            color: var(--bg-primary);
+            font-family: 'Space Mono', monospace;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: lowercase;
+            letter-spacing: 0.05em;
+        }
+
+        .form-button:hover {
+            opacity: 0.8;
+        }
+
+        .form-note {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Contact Info */
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 3rem;
+        }
+
+        .info-card {
+            padding: 2rem;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .info-card:hover {
+            border-color: var(--accent-color);
+        }
+
+        .info-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .info-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .info-details {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .info-item {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .info-item a {
+            color: var(--text-primary);
+            border-bottom: 1px solid var(--border-color);
+            transition: border-color 0.3s ease;
+        }
+
+        .info-item a:hover {
+            border-color: var(--accent-color);
+            opacity: 1;
+        }
+
+        /* Map Section */
+        .map-section {
+            padding: 0;
+            max-width: 100%;
+        }
+
+        .map-container {
+            width: 100%;
+            height: 500px;
+            background: linear-gradient(135deg, var(--border-color) 0%, var(--hover-bg) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .map-placeholder {
+            text-align: center;
+            color: var(--text-secondary);
+        }
+
+        .map-placeholder-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .map-placeholder-text {
+            font-size: 0.9rem;
+        }
+
+        /* Quick Links */
+        .quick-links-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .quick-link-card {
+            padding: 2rem;
+            border: 1px solid var(--border-color);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .quick-link-card:hover {
+            border-color: var(--accent-color);
+            transform: translateY(-4px);
+        }
+
+        .quick-link-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .quick-link-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+
+        .quick-link-desc {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .quick-link-button {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            border: 1px solid var(--border-color);
+            font-size: 0.75rem;
+            transition: all 0.3s ease;
+        }
+
+        .quick-link-button:hover {
+            border-color: var(--accent-color);
+            opacity: 1;
+        }
+
+        /* Office Hours */
+        .hours-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .hours-card {
+            padding: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .hours-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        .hours-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .hours-item {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .hours-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .hours-day {
+            color: var(--text-secondary);
+        }
+
+        .hours-time {
+            font-weight: 500;
+        }
+
+        /* Social Links */
+        .social-section {
+            text-align: center;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .social-link {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+            min-width: 120px;
+            transition: all 0.3s ease;
+        }
+
+        .social-link:hover {
+            border-color: var(--accent-color);
+            transform: scale(1.05);
+        }
+
+        .social-icon {
+            font-size: 2rem;
+        }
+
+        .social-name {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        /* FAQ Section */
+        .faq-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .faq-item {
+            padding: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .faq-question {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .faq-answer {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem 2rem 2rem;
+            background-color: var(--bg-primary);
+            border-top: 1px solid var(--border-color);
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .footer-col h4 {
+            font-family: 'Syne', sans-serif;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .footer-col p,
+        .footer-col a {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-bottom {
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            header {
+                padding: 1rem 1.5rem;
+            }
+
+            nav {
+                gap: 1.5rem;
+            }
+
+            nav a {
+                font-size: 0.7rem;
+            }
+
+            .page-header {
+                padding: 8rem 1.5rem 3rem;
+            }
+
+            .content-section {
+                padding: 3rem 1.5rem;
+            }
+
+            .contact-grid {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+
+            .theme-toggle {
+                bottom: 1.5rem;
+                right: 1.5rem;
+                width: 45px;
+                height: 45px;
+            }
+
+            .social-links {
+                gap: 1rem;
+            }
+
+            .map-container {
+                height: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Theme Toggle Button -->
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+        <span id="themeIcon">☀️</span>
+    </button>
+
+    <header>
+        <a href="index.html" class="logo">lab</a>
+        <nav>
+            <a href="about.html">about</a>
+            <a href="research.html">research</a>
+            <a href="news.html">news</a>
+            <a href="team.html">team</a>
+            <a href="publications.html">publications</a>
+            <a href="contact.html" class="active">contact</a>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Page Header -->
+        <section class="page-header">
+            <h1 class="page-title">Get in Touch</h1>
+            <p class="page-subtitle">
+                We're always interested in hearing from prospective students, collaborators, 
+                and anyone passionate about advancing artificial intelligence research.
+            </p>
+        </section>
+
+        <!-- Contact Form & Info -->
+        <section class="content-section">
+            <div class="contact-grid">
+                <!-- Contact Form -->
+                <div>
+                    <h2 class="section-heading">Send us a Message</h2>
+                    <form class="contact-form" id="contactForm">
+                        <div class="form-group">
+                            <label class="form-label" for="name">Name</label>
+                            <input type="text" id="name" class="form-input" placeholder="Your name" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="email">Email</label>
+                            <input type="email" id="email" class="form-input" placeholder="your.email@example.com" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="subject">Subject</label>
+                            <select id="subject" class="form-select" required>
+                                <option value="">Select a subject</option>
+                                <option value="phd">PhD Application</option>
+                                <option value="masters">Master's Application</option>
+                                <option value="postdoc">Postdoc Inquiry</option>
+                                <option value="collaboration">Research Collaboration</option>
+                                <option value="visit">Visiting Researcher</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="message">Message</label>
+                            <textarea id="message" class="form-textarea" placeholder="Tell us about your inquiry..." required></textarea>
+                        </div>
+
+                        <button type="submit" class="form-button">Send Message</button>
+
+                        <p class="form-note">
+                            We typically respond within 3-5 business days. For urgent matters, 
+                            please contact us directly via phone or email.
+                        </p>
+                    </form>
+                </div>
+
+                <!-- Contact Information -->
+                <div class="contact-info">
+                    <div class="info-card">
+                        <div class="info-icon">📍</div>
+                        <h3 class="info-title">Location</h3>
+                        <div class="info-details">
+                            <p class="info-item">Engineering Building 301</p>
+                            <p class="info-item">Seoul National University</p>
+                            <p class="info-item">1 Gwanak-ro, Gwanak-gu</p>
+                            <p class="info-item">Seoul 08826, South Korea</p>
+                        </div>
+                    </div>
+
+                    <div class="info-card">
+                        <div class="info-icon">📧</div>
+                        <h3 class="info-title">Email</h3>
+                        <div class="info-details">
+                            <p class="info-item">General Inquiries: <a href="mailto:lab@example.com">lab@example.com</a></p>
+                            <p class="info-item">Director: <a href="mailto:minjun.kim@example.com">minjun.kim@example.com</a></p>
+                            <p class="info-item">Admissions: <a href="mailto:admissions@example.com">admissions@example.com</a></p>
+                        </div>
+                    </div>
+
+                    <div class="info-card">
+                        <div class="info-icon">📞</div>
+                        <h3 class="info-title">Phone</h3>
+                        <div class="info-details">
+                            <p class="info-item">Office: +82 02 880 0000</p>
+                            <p class="info-item">Fax: +82 02 880 0001</p>
+                            <p class="info-item">Hours: Mon-Fri, 9:00 AM - 6:00 PM KST</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Map -->
+        <section class="map-section">
+            <div class="map-container">
+                <div class="map-placeholder">
+                    <div class="map-placeholder-icon">🗺️</div>
+                    <p class="map-placeholder-text">Seoul National University Campus Map</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quick Links -->
+        <section class="content-section">
+            <h2 class="section-heading">Quick Links</h2>
+            <p class="section-title">Find what you're looking for</p>
+            
+            <div class="quick-links-grid">
+                <a href="team.html" class="quick-link-card">
+                    <div class="quick-link-icon">🎓</div>
+                    <h3 class="quick-link-title">Join Our Team</h3>
+                    <p class="quick-link-desc">
+                        Explore open positions for PhD students, master's students, and postdocs.
+                    </p>
+                    <span class="quick-link-button">View Positions</span>
+                </a>
+
+                <a href="research.html" class="quick-link-card">
+                    <div class="quick-link-icon">🔬</div>
+                    <h3 class="quick-link-title">Research Collaboration</h3>
+                    <p class="quick-link-desc">
+                        Learn about our research areas and partnership opportunities.
+                    </p>
+                    <span class="quick-link-button">Explore Research</span>
+                </a>
+
+                <a href="publications.html" class="quick-link-card">
+                    <div class="quick-link-icon">📚</div>
+                    <h3 class="quick-link-title">Publications</h3>
+                    <p class="quick-link-desc">
+                        Browse our latest research papers and contributions to the field.
+                    </p>
+                    <span class="quick-link-button">View Papers</span>
+                </a>
+
+                <a href="#" class="quick-link-card">
+                    <div class="quick-link-icon">💼</div>
+                    <h3 class="quick-link-title">Industry Partnerships</h3>
+                    <p class="quick-link-desc">
+                        Interested in collaboration? Reach out to discuss opportunities.
+                    </p>
+                    <span class="quick-link-button">Learn More</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- Office Hours -->
+        <section class="content-section alternate">
+            <h2 class="section-heading">Office Hours</h2>
+            <p class="section-title">When you can find us</p>
+            
+            <div class="hours-grid">
+                <div class="hours-card">
+                    <h3 class="hours-title">Lab Schedule</h3>
+                    <div class="hours-list">
+                        <div class="hours-item">
+                            <span class="hours-day">Monday - Thursday</span>
+                            <span class="hours-time">9:00 AM - 6:00 PM</span>
+                        </div>
+                        <div class="hours-item">
+                            <span class="hours-day">Friday</span>
+                            <span class="hours-time">9:00 AM - 5:00 PM</span>
+                        </div>
+                        <div class="hours-item">
+                            <span class="hours-day">Saturday - Sunday</span>
+                            <span class="hours-time">Closed</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="hours-card">
+                    <h3 class="hours-title">Professor Office Hours</h3>
+                    <div class="hours-list">
+                        <div class="hours-item">
+                            <span class="hours-day">Tuesday</span>
+                            <span class="hours-time">2:00 PM - 4:00 PM</span>
+                        </div>
+                        <div class="hours-item">
+                            <span class="hours-day">Thursday</span>
+                            <span class="hours-time">2:00 PM - 4:00 PM</span>
+                        </div>
+                        <div class="hours-item">
+                            <span class="hours-day">Other times</span>
+                            <span class="hours-time">By appointment</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="hours-card">
+                    <h3 class="hours-title">Student Meetings</h3>
+                    <div class="hours-list">
+                        <div class="hours-item">
+                            <span class="hours-day">Group Meeting</span>
+                            <span class="hours-time">Wed 3:00 PM</span>
+                        </div>
+                        <div class="hours-item">
+                            <span class="hours-day">Reading Group</span>
+                            <span class="hours-time">Fri 10:00 AM</span>
+                        </div>
+                        <div class="hours-item">
+                            <span class="hours-day">One-on-One</span>
+                            <span class="hours-time">By appointment</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Social Media -->
+        <section class="content-section social-section">
+            <h2 class="section-heading">Connect With Us</h2>
+            <p class="section-title">Follow our latest updates and research</p>
+            
+            <div class="social-links">
+                <a href="#" class="social-link">
+                    <span class="social-icon">💻</span>
+                    <span class="social-name">GitHub</span>
+                </a>
+                <a href="#" class="social-link">
+                    <span class="social-icon">🎓</span>
+                    <span class="social-name">Google Scholar</span>
+                </a>
+                <a href="#" class="social-link">
+                    <span class="social-icon">🐦</span>
+                    <span class="social-name">Twitter</span>
+                </a>
+                <a href="#" class="social-link">
+                    <span class="social-icon">💼</span>
+                    <span class="social-name">LinkedIn</span>
+                </a>
+                <a href="#" class="social-link">
+                    <span class="social-icon">📺</span>
+                    <span class="social-name">YouTube</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- FAQ -->
+        <section class="content-section alternate">
+            <h2 class="section-heading">Frequently Asked Questions</h2>
+            <p class="section-title">Common questions we receive</p>
+            
+            <div class="faq-list">
+                <div class="faq-item">
+                    <h3 class="faq-question">How do I apply for a PhD position?</h3>
+                    <p class="faq-answer">
+                        Applications for PhD positions are handled through the Seoul National University 
+                        graduate admissions system. We recommend reaching out to Prof. Kim Minjun directly 
+                        with your CV and research interests before applying. Application deadlines are 
+                        typically in December for Fall admission.
+                    </p>
+                </div>
+
+                <div class="faq-item">
+                    <h3 class="faq-question">Do you accept visiting students or researchers?</h3>
+                    <p class="faq-answer">
+                        Yes, we welcome visiting researchers and students for short-term collaborations 
+                        (minimum 3 months). Please contact us with your research proposal, CV, and proposed 
+                        visit dates. Note that visiting positions are typically self-funded or require 
+                        external funding.
+                    </p>
+                </div>
+
+                <div class="faq-item">
+                    <h3 class="faq-question">What are the requirements for joining the lab?</h3>
+                    <p class="faq-answer">
+                        We look for candidates with strong backgrounds in computer science, mathematics, 
+                        or related fields. Proficiency in Python and experience with deep learning frameworks 
+                        (PyTorch/TensorFlow) is highly valued. Research experience and publications are 
+                        preferred but not required for master's students.
+                    </p>
+                </div>
+
+                <div class="faq-item">
+                    <h3 class="faq-question">Can I collaborate with your lab on a research project?</h3>
+                    <p class="faq-answer">
+                        We're always open to research collaborations with academic institutions and industry 
+                        partners. Please email us with details about your proposed collaboration, including 
+                        research objectives, timeline, and potential funding sources.
+                    </p>
+                </div>
+
+                <div class="faq-item">
+                    <h3 class="faq-question">How can I access your published code and datasets?</h3>
+                    <p class="faq-answer">
+                        Most of our code is available on our GitHub organization page. Datasets are typically 
+                        available through links in our publications. If you need access to specific resources, 
+                        please contact us directly with details about your research use case.
+                    </p>
+                </div>
+
+                <div class="faq-item">
+                    <h3 class="faq-question">Do you offer internship opportunities?</h3>
+                    <p class="faq-answer">
+                        We occasionally offer internship positions for exceptional undergraduate students, 
+                        typically during summer (June-August). These are competitive positions requiring 
+                        strong programming skills and genuine interest in AI research. Applications are 
+                        reviewed on a rolling basis.
+                    </p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-col">
+                <h4>Location</h4>
+                <p>Engineering Building 301</p>
+                <p>Seoul National University</p>
+                <p>08826, Seoul (KR)</p>
+            </div>
+            
+            <div class="footer-col">
+                <h4>Contact</h4>
+                <p><a href="mailto:lab@example.com">lab@example.com</a></p>
+                <p>+82 02 880 0000</p>
+            </div>
+            
+            <div class="footer-col">
+                <h4>Social</h4>
+                <a href="#">Github</a>
+                <a href="#">Google Scholar</a>
+                <a href="#">Twitter</a>
+                <a href="#">LinkedIn</a>
+            </div>
+
+            <div class="footer-col">
+                <h4>Resources</h4>
+                <a href="publications.html">Publications</a>
+                <a href="#">Code</a>
+                <a href="#">Datasets</a>
+                <a href="#">Blog</a>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <span>© 2024 Computational Intelligence Lab. All rights reserved.</span>
+        </div>
+    </footer>
+
+    <script>
+        // Theme toggle functionality
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+        const htmlElement = document.documentElement;
+
+        // Check for saved theme preference or default to 'light'
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        htmlElement.setAttribute('data-theme', currentTheme);
+        updateThemeIcon(currentTheme);
+
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = htmlElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            
+            htmlElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateThemeIcon(newTheme);
+        });
+
+        function updateThemeIcon(theme) {
+            themeIcon.textContent = theme === 'light' ? '🌙' : '☀️';
+        }
+
+        // Contact form submission
+        const contactForm = document.getElementById('contactForm');
+        contactForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const subject = document.getElementById('subject').value;
+            const message = document.getElementById('message').value;
+            
+            // In a real implementation, this would send the data to a server
+            alert(`Thank you for your message, ${name}! We'll get back to you at ${email} soon.`);
+            
+            // Reset form
+            contactForm.reset();
+        });
+    </script>
+</body>
+</html>
